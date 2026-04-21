@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-anchor-sections",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create anchor sections from markdown headers",
   "license": "Apache-2.0",
   "author": "Cassondra Roberts <castastrophe@users.noreply.github.com> (https://allons-y.llc)",
