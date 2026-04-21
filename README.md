@@ -1,6 +1,6 @@
 <h1 align="center">markdown-it-anchor-sections</h1>
 <p align="center">
-  <b>Markdown headers wrapped in logical sections.</b>
+  <b>Markdown headers wrapped in semantic sections with anchor tags.</b>
 </p>
 
 <div align="center">
@@ -11,39 +11,41 @@
 
 </div>
 
-Wrap markdown content in `<section>` tags automatically, grouped by header level. Perfect for Intersection Observers, scroll-spying, or semantic styling without manual markup.
+Wrap markdown content in `<section>` tags automatically, grouped by header level, and hoisting or creating an anchor tag on the section; perfect for Intersection Observers, scroll-spying, or semantic styling without manual markup.
 
 ```md
 # Introduction
+
 Hello world.
 
 ## Details
+
 More info here.
 ```
 
 renders to:
 
 ```html
-<section>
-  <h1>Introduction</h1>
-  <p>Hello world.</p>
-  <section>
-    <h2>Details</h2>
-    <p>More info here.</p>
-  </section>
+<section id="introduction">
+	<h1>Introduction</h1>
+	<p>Hello world.</p>
+	<section id="details">
+		<h2>Details</h2>
+		<p>More info here.</p>
+	</section>
 </section>
 ```
 
 ## The problem
 
-Modern web layouts often require grouping content into logical blocks—for example, to trigger animations as sections enter the viewport, or to build sticky navigation that knows which part of the page you're reading.
+Modern web layouts often require grouping content into logical blocks—for example, to trigger animations as sections enter the viewport or to build sticky navigation that knows which part of the page you're reading.
 
 Markdown is inherently flat. While you can manually wrap blocks in `<div>` or `<section>` tags, it breaks the readability of the raw text and is prone to errors. **markdown-it-anchor-sections bridges the gap** by treating your header hierarchy as the source of truth for your document's structure.
 
 ## Features
 
-- **Hierarchical nesting** — lower-level headers (like `h2`) are automatically nested within higher-level sections (like `h1`)
-- **Attribute-aware** — works seamlessly with `markdown-it-attrs` or `markdown-it-anchor`; sections inherit the same IDs and classes as their headers
+- **Hierarchical nesting** — lower-level headers (like `h3`) are automatically nested within higher-level sections (like `h2`)
+- **Attribute-aware** — works seamlessly with `markdown-it-attrs` sections inherit the same IDs as their headers
 - **Semantic HTML** — produces clean, valid `<section>` structures that reflect your content's outline
 - **Zero configuration** — works out of the box with sensible defaults
 - **Lightweight** — tiny footprint with no external dependencies
@@ -62,8 +64,8 @@ bun add markdown-it-anchor-sections
 ## Usage
 
 ```js
-import md from 'markdown-it';
-import anchorSections from 'markdown-it-anchor-sections';
+import md from "markdown-it";
+import anchorSections from "markdown-it-anchor-sections";
 
 const parser = md().use(anchorSections);
 
@@ -80,31 +82,30 @@ console.log(parser.render(src));
 
 ### With attributes
 
-If you use [markdown-it-attrs] or [markdown-it-anchor] before this plugin, the generated `<section>` tags will inherit any attributes applied to the headers:
+If you use [markdown-it-attrs] before this plugin, the generated `<section>` tags will inherit the id applied to the headers and retain any other attributes on the header.
 
 ```js
-import md from 'markdown-it';
-import attrs from 'markdown-it-attrs';
-import anchorSections from 'markdown-it-anchor-sections';
+import md from "markdown-it";
+import attrs from "markdown-it-attrs";
+import anchorSections from "markdown-it-anchor-sections";
 
-const parser = md()
-  .use(attrs)
-  .use(anchorSections);
+const parser = md().use(attrs).use(anchorSections);
 ```
 
 **Markdown:**
 
 ```md
-# Great stuff {.jumbotron}
+# Great stuff {.jumbotron #intro}
+
 lorem ipsum
 ```
 
 **Output:**
 
 ```html
-<section class="jumbotron">
-  <h1 class="jumbotron">Great stuff</h1>
-  <p>lorem ipsum</p>
+<section id="intro">
+	<h1 class="jumbotron">Great stuff</h1>
+	<p>lorem ipsum</p>
 </section>
 ```
 
@@ -126,7 +127,6 @@ lorem ipsum
 This project was inspired by [markdown-it-header-sections](https://github.com/arve0/markdown-it-header-sections).
 
 [markdown-it-attrs]: https://github.com/arve0/markdown-it-attrs
-[markdown-it-anchor]: https://github.com/valeriangalliat/markdown-it-anchor
 [github-image]: https://github.com/castastrophe/markdown-it-anchor-sections/actions/workflows/test.yml/badge.svg?branch=main
 [github-url]: https://github.com/castastrophe/markdown-it-anchor-sections/actions/workflows/test.yml
 [npm-image]: https://img.shields.io/npm/v/markdown-it-anchor-sections.svg
